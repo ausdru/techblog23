@@ -3,15 +3,17 @@ const { User } = require('../models');
 const userSeeds = [
 
     {
+        user_id: 1,
         user_name: 'Borat',
-        email: 'bangbangskeetskeet@gmail.com',
-        password: abc123,
+        email: 'bangbang@gmail.com',
+        password: 22,
     },
 
     {
+        user_id: 2,
         user_name: 'derp',
         email: 'mememan420@yahoo.com',
-        password: gratata222,
+        password: 25,
     },
 
 ];

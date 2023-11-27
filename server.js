@@ -3,7 +3,7 @@ const path = require('path');
 
 const express = require ('express');
 
-const routes = require ('./Develop/controllers');
+const router = require ('./Develop/controllers');
 
 const sequelize = require ('./Develop/config/connection');
 
@@ -65,16 +65,12 @@ app.use(session(userSession));
 // ---------------------------------------------------------------------------
 // Routes Setup:
 
-app.use(routes);
+app.use(router);
 
 // ---------------------------------------------------------------------------
 // Starting Server & Syncing With Database:
 
 sequelize.sync({ force: false })
-
     .then(() => {
-
         app.listen(PORT, () => console.log(`Application now listening on ${PORT}!`));
-    }
-
-);
+    });

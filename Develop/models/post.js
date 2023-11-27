@@ -33,6 +33,18 @@ Post.init(
       autoIncrement: true,
 
     },
+    
+    user_id: {
+
+      type: DataTypes.INTEGER,
+
+      references: 
+        {
+          model: 'user',
+          key: 'id',
+        }
+
+    },
 
     title: {
 
@@ -46,23 +58,13 @@ Post.init(
 
       type: DataTypes.STRING,
 
+      defaultValue: false,
+
       allowNull: false,
 
       validate: { len: [1] },
 
-    },
-
-    user_id: {
-
-      type: DataTypes.INTEGER,
-
-      references: 
-        {
-          model: 'user',
-          key: 'id',
-        }
-
-    },
+    }
 
   },
 
@@ -70,7 +72,7 @@ Post.init(
     sequelize,
     freezeTableName: true,
     underscored: true,
-    modelName: 'Post'
+    modelName: 'post'
   }
 
 );

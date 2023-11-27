@@ -13,7 +13,7 @@ const postSeeds = [
         title: 'Loving the weather',
         post_date: 'November 12, 2023 14:00:00',
         post_content: 'Gotta love the seasons changing. Hope you are all healthy & well.',
-        user_id: 3
+        user_id: 2
     },
 
 ];
