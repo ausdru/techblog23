@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 3306;
 // ---------------------------------------------------------------------------
 // Session Configuration:
 const userSession = {
-    secret: process.env.DB_SECRET || '0212', // Use a fallback if DB_SECRET is not set
+    secret: process.env.DB_SECRET || 'f6c2e26da9035bcc47904e59890fe987bf21e7a58a250e07f8f44a18caf0b1ae',
     cookie: {},
     resave: false,
     saveUninitialized: true,
