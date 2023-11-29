@@ -1,11 +1,11 @@
 // Server Configuration:
 const path = require('path');
 
-const express = require ('express');
+const express = require('express');
 
-const router = require ('./Develop/controllers');
+const router = require('./Develop/controllers');
 
-const sequelize = require ('./Develop/config/connection');
+const sequelize = require('./Develop/config/connection');
 
 const exphbs = require('express-handlebars');
 
@@ -24,53 +24,36 @@ const PORT = process.env.PORT || 3306;
 // ---------------------------------------------------------------------------
 // Session Configuration:
 const userSession = {
-
-    secret: process.env.DB_SECRET,
-
+    secret: process.env.DB_SECRET || '0212', // Use a fallback if DB_SECRET is not set
     cookie: {},
-
     resave: false,
-
     saveUninitialized: true,
-
     store: new SequelizeStore({
-
-        db: sequelize
-
-    })
-
+        db: sequelize,
+    }),
 };
 
 // ---------------------------------------------------------------------------
 // Handlebars Engine Setup:
-
 app.engine('handlebars', hbs.engine);
-
 app.set('view engine', 'handlebars');
 
 // ---------------------------------------------------------------------------
 // Body-parsing Middleware:
-
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
 
 // ---------------------------------------------------------------------------
 // Session Middleware:
-
 app.use(session(userSession));
 
 // ---------------------------------------------------------------------------
 // Routes Setup:
-
 app.use(router);
 
 // ---------------------------------------------------------------------------
 // Starting Server & Syncing With Database:
-
-sequelize.sync({ force: false })
-    .then(() => {
-        app.listen(PORT, () => console.log(`Application now listening on ${PORT}!`));
-    });
+sequelize.sync({ force: false }).then(() => {
+    app.listen(PORT, () => console.log(`Application now listening on ${PORT}!`));
+});
