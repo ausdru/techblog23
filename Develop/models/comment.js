@@ -5,7 +5,7 @@ class Comment extends Model {}
 
 Comment.init({
 
-    id: 
+    comment_id: 
     {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -32,7 +32,7 @@ Comment.init({
         allowNull: false,
         references: {
             model: 'user',
-            key: 'id'
+            key: 'user_id'
         }
     },
 
@@ -42,7 +42,7 @@ Comment.init({
         allowNull: false,
         references: {
             model: 'post',
-            key: 'id'
+            key: 'post_id'
         }
     }}, 
     {

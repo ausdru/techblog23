@@ -2,13 +2,13 @@ async function deleteFormHandler(event) {
 
     event.preventDefault();
     
-    const postId = window.location.toString().split('/')[
+    const post_id = window.location.toString().split('/')[
         
         window.location.toString().split('/').length - 1
 
     ];
 
-    const response = await fetch(`/api/posts/${postId}`, {
+    const response = await fetch(`/api/post/${post_id}`, {
 
         method: 'DELETE'
 

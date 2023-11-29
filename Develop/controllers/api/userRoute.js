@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { User } = require('../../models');
+const { User, Post, Comment } = require('../../models');
 
 // 
 router.get('/', (req, res) => {
@@ -41,7 +41,7 @@ router.get('/:id', (req, res) => {
 
         where: {
 
-            id: req.params.id
+            user_idid: req.params.user_id
 
         },
 
@@ -51,7 +51,7 @@ router.get('/:id', (req, res) => {
                 
                 model: Post,
 
-                attributes: ['id', 'title', 'content', 'created_at']
+                attributes: ['post_id', 'post_title', 'post_content', 'created_at']
 
             },
 
@@ -59,13 +59,13 @@ router.get('/:id', (req, res) => {
 
                 model: Comment,
 
-                attributes: ['id', 'comment_text', 'created_at'],
+                attributes: ['comment_id', 'comment_text', 'created_at'],
 
                 include: {
 
                     model: Post,
 
-                    attributes: ['title']
+                    attributes: ['post_title']
 
                 }
 
@@ -108,7 +108,7 @@ router.post('/', (req, res) => {
 
     User.create({
 
-        username: req.body.username,
+        user_name: req.body.user_name,
 
         password: req.body.password
 
@@ -118,9 +118,9 @@ router.post('/', (req, res) => {
 
         req.session.save(() => {
 
-            req.session.user_id = dbUserData.id;
+            req.session.user_id = dbUserData.user_id;
 
-            req.session.username = dbUserData.username;
+            req.session.user_name = dbUserData.user_name;
 
             req.session.loggedIn = true;
 
@@ -147,7 +147,7 @@ router.post('/login', (req, res) => {
 
         where: {
 
-            username: req.body.username
+            username: req.body.user_name
 
         }
 
@@ -159,7 +159,7 @@ router.post('/login', (req, res) => {
 
             res.status(400).json({
 
-                message: 'No user with that username.'
+                message: 'No account found with that username!'
 
             });
 
@@ -173,7 +173,7 @@ router.post('/login', (req, res) => {
 
             res.status(400).json({
 
-                message: 'Incorrect password.'
+                message: 'Incorrect password! Please try again.'
 
             });
 
@@ -183,9 +183,9 @@ router.post('/login', (req, res) => {
 
         req.session.save(() => {
 
-            req.session.user_id = dbUserData.id;
+            req.session.user_id = dbUserData.user_id;
 
-            req.session.username = dbUserData.username;
+            req.session.user_name = dbUserData.user_name;
 
             req.session.loggedIn = true;
 

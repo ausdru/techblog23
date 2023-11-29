@@ -22,7 +22,7 @@ Post.init(
 
   {
 
-    id: {
+    post_id: {
 
       type: DataTypes.INTEGER,
 
@@ -41,12 +41,12 @@ Post.init(
       references: 
         {
           model: 'user',
-          key: 'id',
+          key: 'user_id',
         }
 
     },
 
-    title: {
+    post_title: {
 
       type: DataTypes.STRING,
 
@@ -54,7 +54,7 @@ Post.init(
 
     },
 
-    content: {
+    post_content: {
 
       type: DataTypes.STRING,
 
