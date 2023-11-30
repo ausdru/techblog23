@@ -109,7 +109,7 @@ router.get('/signup', (req, res) => {
 
 
 router.get('*', (req, res) => {
-    res.status(404).send("nSomething went wrong!");
+    res.status(404).send("Something went wrong!");
 })
 
 

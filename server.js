@@ -3,13 +3,13 @@ const path = require('path');
 
 const express = require('express');
 
-const router = require('./Develop/controllers');
+const router = require('./controllers');
 
-const sequelize = require('./Develop/config/connection');
+const sequelize = require('./config/connection');
 
 const exphbs = require('express-handlebars');
 
-const helpers = require('./Develop/utils/helpers');
+const helpers = require('./utils/helpers');
 
 const hbs = exphbs.create({ helpers });
 
@@ -19,13 +19,15 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 const app = express();
 
-const PORT = process.env.PORT || 3306;
+const PORT = process.env.PORT || 3001;
 
 // ---------------------------------------------------------------------------
 // Session Configuration:
 const userSession = {
-    secret: process.env.DB_SECRET || 'f6c2e26da9035bcc47904e59890fe987bf21e7a58a250e07f8f44a18caf0b1ae',
-    cookie: {},
+    secret: process.env.DB_SECRET,
+    cookie: {
+        maxAge: 60 * 60 * 1000,
+    },
     resave: false,
     saveUninitialized: true,
     store: new SequelizeStore({
