@@ -2,36 +2,36 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>[AD] plugged.in</title>
-    <link rel="stylesheet" type="text/css" href="/css/styles.css">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>[AD] plugged.in</title>
+        <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    </head>
 
-<body>
-    <header>
-        <h1>You are now [plugged.in] 🔌 </h1>
-            <nav>
-                <ul>
-                    <li><a href="/" title="Home">Home</a></li>
-                    {{#if loggedIn}}
-                        <li><a href="/dashboard">Dashboard</a></li>
-                        <li><button id="logout" class="btn-no-style logout">Logout</button></li>
-                    {{else}}
-                        <li><a href="/login">Login</a></li>
-                    {{/if}}
-                </ul>
-            </nav>
-    </header>
+    <body>
+        <header>
+            <h1>You are now [plugged.in] 🔌 </h1>
+                <nav>
+                    <ul>
+                        <li><a href="/" title="Home">Home</a></li>
+                        {{#if loggedIn}}
+                            <li><a href="/dashboard">Dashboard</a></li>
+                            <li><button id="logout" class="btn-no-style logout">Logout</button></li>
+                        {{else}}
+                            <li><a href="/login">Login</a></li>
+                        {{/if}}
+                    </ul>
+                </nav>
+        </header>
 
-    <main class="container">
-        {{{body}}}
-    </main>
+        <main class="container">
+            {{{body}}}
+        </main>
 
-    <script src="/Develop/public/javascript/logout.js"></script>
+        <script src="/public/javascript/logout.js"></script>
 
-    <footer>[plugged.in] © 2023</footer>
-</body>
+        <footer>[plugged.in] © 2023</footer>
+    </body>
 
 </html>
