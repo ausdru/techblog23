@@ -1,24 +1,23 @@
-<section class="login-page">
-        <div class="form-heading">
-            <h1>Log In</h1>
-        </div>
-        <div class="form-section">
-            <form class="login-form">
-                <div>
-                    <label for="username-login">Username</label>
-                    <input type="text" class="entry-field" id="username-login" />
-                </div>
-                <div>
-                    <label for="password-login">Password</label>
-                    <input type="password" class="entry-field" id="password-login" />
-                </div>
-                <div>
-                    <button type="submit" class="login-signup-btn">Log In</button>
-                </div>
-            </form>
-        </div>
+<form action="/api/users/login" method="POST">
+    <h1>Log In:</h1>
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" id="user_id" name="username" required>
+    </div>
+    <br>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <br>
+    <div>
+        <button type="submit">Log In</button>
+    </div>
 
-        <a href="/signup" class="sign-in-link">Sign Up</a>
-    </section>
+    <div>
+        <p>Don't have an account? <a href="/signup">Sign up instead</a></p>
+    </div>
+    
+</form>
 
-    <script src="/public/javascript/login.js"></script>
+<script src="/public/javascript/login.js"></script>

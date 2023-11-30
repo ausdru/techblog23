@@ -1,17 +1,7 @@
+{{#each posts}}
 <article class="post">
-    <div class="whole-post">
-        <div class="info-section">
-            <div class="post-name">
-                <a href= "/post/{{post_id}}" class="links">{{post_title}}</a>
-            </div>
-            <div class="created-by">
-                <p id="comment-subtitle">
-                    Posted by <b>{{user.user_name}} </b> on <b>{{formatDate, created_at}}</b>
-                </p>
-            </div>
-        </div>
-        <div class="content-section">
-            <p>{{post_content}}</p>
-        </div>
-    </div>
+  <h2><a href="/post/{{post_id}}">{{post_title}}</a></h2>
+  <p>{{post.post_content}}</p>
+  <p>Posted by {{post.user_id}} on {{formatDate post.created_at}}</p>
 </article>
+{{/each}}

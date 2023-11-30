@@ -1,9 +1,13 @@
-<ul class="post-list">
-    {{#each posts as |post|}}
-    <li>
-        <div class="blog-card">
-            {{ post-info post }}
-        </div>
-    </li>
+<div class="post-cards">
+    {{#each posts as |post| }}
+    <div class="card">
+        <div class="card-body">
+        <a href="/post/{{post_id}}"></a>
+        <h1>{{post_title}}</h1>
+        <p>Created by {{post.user_id}} on {{formatDate post.created_at}}</p>
+        <br>
+        <p>{{post_content}}</p>
+        <br>
+    </div>
     {{/each}}
-</ul>
+</div>
