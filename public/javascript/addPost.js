@@ -1,31 +1,54 @@
-async function newFormHandler(event) {
-    
+const createPostForm = async (event) => {
+
     event.preventDefault();
+  
+    const title = document.querySelector('#title').value.trim();
 
-    const post_title = document.querySelector('input[name="post-title"]').value;
-    
-    const post_content = document.querySelector('textarea[name="post-content"]').value.trim();
+    const content = document.querySelector('#content').value.trim();
+  
+    if (!title || !content) {
 
-    const response = await fetch(`/api/post`, {
+      alert('Inputs cannot be empty.');
 
-        method: 'POST',
-
-        body: JSON.stringify({ post_title, post_content }),
-
-        headers: {'Content-Type': 'application/json'}
-
-    });
-
-    if (response.ok) {
-
-        document.location.replace('/dashboard');
-
-    } else {
-
-        alert(response.statusText);
+      return;
 
     }
+  
+    try {
 
-}
+      const response = await fetch("/api/posts", {
 
-document.querySelector('.new-post-form').addEventListener('submit', newFormHandler);
+        method: "POST",
+
+        body: JSON.stringify({ title, content }),
+
+        headers: {"Content-Type": "application/json"},
+
+      });
+  
+      if (response.ok) {
+
+        const data = await response.json();
+
+        console.log('Post successfully created.', data);
+  
+        window.location.replace("/dashboard");
+
+      } else {
+
+        const errmsg = await response.json();
+
+        console.error('Unable to create post!', errmsg);
+
+        alert('Post unsuccessful. Please try again.');
+
+      }
+
+    } catch (error) {
+
+      console.error('Post creation error', error);
+
+      alert('Unsuccessful. Please try again!');
+    }
+    
+  };

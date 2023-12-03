@@ -1,37 +1,62 @@
-async function editFormHandler(event) {
+const editPostForm = async (event) => {
 
     event.preventDefault();
+  
+    const postId = window.location.pathname.split('/')[2];
 
-    const post_title = document.querySelector('input[name="post-title"]').value;
+    console.log('post-ID:', postId);
 
-    const post_content = document.querySelector('textarea[name="post-content"]').value.trim();
+    const title = document.querySelector('#title').value.trim();
 
-    const post_id = window.location.toString().split('/')[
+    const content = document.querySelector('#content').value.trim();
 
-        window.location.toString().split('/').length - 1
+    if (!title || !content) {
 
-    ];
+      alert('Please type in post!');
 
-    const response = await fetch (`/api/post/${post_id}`, {
+      return;
+    }
+  
+    try {
+
+      const response = await fetch(`/api/posts/${postId}`, {
 
         method: 'PUT',
 
-        body: JSON.stringify({ post_title, post_content }),
+        body: JSON.stringify({ title, content }),
 
-        headers: { 'Content-Type': 'application/json'}
+        headers: {'Content-Type': 'application/json'}
 
-    });
+      });
+  
+      if (response.ok) {
 
-    if (response.ok) {
- 
-        document.location.replace('/dashboard');
+        const data = await response.json();
 
-    } else {
+        console.log('Post successfully updated!', data);
 
-        alert(response.statusText);
+        window.location.replace('/dashboard');
+
+      } else {
+
+        const errormsg = await response.json();
+
+        console.error('Unable to edit post!', errmsg);
+
+        alert('Edit unsuccessful. Please try again.');
+
+      }
+
+    } catch (error) {
+
+      console.error('Post edit unsuccessful', error);
+
+      alert('Unsuccessful. Please try again!');
 
     }
 
-}
-
-document.querySelector('.edit-post-form').addEventListener('submit', editFormHandler);
+  };
+  
+  document
+    .querySelector('.editPost')
+    .addEventListener('submit', editPostForm);

@@ -1,35 +1,31 @@
-document.addEventListener('DOMContentLoaded', () => {
+const logoutHandler = async () => {
 
-    const logoutButton = document.querySelector('#logout');
+    try {
 
-    if (logoutButton) {
-
-        logoutButton.addEventListener('click', logout);
-
-    }
-
-});
-
-async function logout() {
-
-    console.log('Logout button selected.')
-
-    const response = await fetch('/api/user/logout', {
+      const response = await fetch('/api/users/logout', {
 
         method: 'POST',
 
         headers: { 'Content-Type': 'application/json' }
 
-    });
+      });
 
-    if (response.ok) {
+      if (response.ok) {
 
         document.location.replace('/');
-    
-    } else {
 
-        alert(response.statusText);
+      } else {
+
+        alert('Logout attempt unsuccessful!');
+
+      }
+
+    } catch (error) {
+
+      console.error('Logout unsuccessful.', error);
 
     }
-    
-}
+
+  };
+
+  document.querySelector('#logout').addEventListener('click', logoutHandler);

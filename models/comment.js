@@ -1,56 +1,43 @@
+// models/comment.js
+
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
 class Comment extends Model {}
 
 Comment.init({
-
-    comment_id: 
-    {
+    id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true
     },
-
-    comment_date:
-    {
-        type:DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW
-    },
-
-    comment_text: 
-    {
+    text: {
         type: DataTypes.TEXT,
-        allowNull: false
-    },
-
-    user_id: 
-    {
-        type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 'Default Comment Text' // Add this line with your desired default text
+    },
+    user_id: {
+        type: DataTypes.INTEGER,
         references: {
             model: 'user',
-            key: 'user_id'
+            key: 'id'
         }
     },
-
-    post_id: 
-    {
+    post_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
             model: 'post',
-            key: 'post_id'
+            key: 'id'  
         }
-    }}, 
-    {
-        sequelize,
-        freezeTableName: true,
-        underscored: true,
-        modelName: 'comment'
     }
-)
+}, 
+{
+    sequelize,
+    freezeTableName: true,
+    underscored: true,
+    modelName: 'comment'
+});
 
 module.exports = Comment;
+

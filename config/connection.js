@@ -10,7 +10,7 @@
 //     dialectOptions: {
 //       ssl: {
 //         require: true,
-//         rejectUnauthorized: false, // You may need this depending on your database setup
+//         rejectUnauthorized: false
 //       },
 //     },
 //   });
@@ -45,5 +45,9 @@ if (process.env.JAWSDB_URL) {
     }
   );
 }
+
+console.log(sequelize);
+
+
 module.exports = sequelize;
 

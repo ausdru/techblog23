@@ -10,7 +10,7 @@ class User extends Model {
 
 User.init(
   {
-    user_id: 
+    id: 
     {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -18,18 +18,19 @@ User.init(
       autoIncrement: true,
     },
 
-    user_name: 
+    username: 
     {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
+      defaultValue: sequelize.fn('CONCAT', 'user_', sequelize.col('id')),
     },
 
     password: 
     {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: { len: [2,10] },
+      validate: { len: [6] },
     },
 
   },
@@ -37,15 +38,15 @@ User.init(
   {
     hooks: {
       async beforeCreate(newUserData) {
-        newUserData.password = await bcrypt.hash(newUserData.password, 10);
-        return newUserData;
-      },
-      async beforeUpdate(updatedUserData) {
-        updatedUserData.password = await bcrypt.hash(updatedUserData.password, 10);
-        return updatedUserData;
+        try {
+          newUserData.username = newUserData.username.toLowerCase();
+          newUserData.password = await bcrypt.hash(newUserData.password, 6);
+          return newUserData;
+        } catch (error) {
+          throw new Error("Error hashing the password!");
+        }
       },
     },
-    
     sequelize,
     timestamps: false,
     freezeTableName: true,

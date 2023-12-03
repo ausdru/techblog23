@@ -2,27 +2,14 @@ const { Model, DataTypes } = require('sequelize');
 
 const sequelize = require('../config/connection');
 
-sequelize.sync({ force: false })
-
-    .then(() => {
-
-      console.log('Database and tables successfully synchronized.');
-
-    })
-
-    .catch((error) => {
-
-      console.error('Error synchronizing with database:', error);
-
-    });
-
 class Post extends Model {}
 
 Post.init(
 
   {
 
-    post_id: {
+    id: {
+
 
       type: DataTypes.INTEGER,
 
@@ -33,7 +20,23 @@ Post.init(
       autoIncrement: true,
 
     },
-    
+
+    title: {
+
+      type: DataTypes.STRING,
+
+      allowNull: false,
+
+    },
+
+    content: {
+
+      type: DataTypes.TEXT,
+
+      allowNull: false
+
+    },
+
     user_id: {
 
       type: DataTypes.INTEGER,
@@ -41,30 +44,10 @@ Post.init(
       references: 
         {
           model: 'user',
-          key: 'user_id',
+          key: 'id'
         }
 
     },
-
-    post_title: {
-
-      type: DataTypes.STRING,
-
-      allowNull: false,
-
-    },
-
-    post_content: {
-
-      type: DataTypes.STRING,
-
-      defaultValue: false,
-
-      allowNull: false,
-
-      validate: { len: [1] },
-
-    }
 
   },
 

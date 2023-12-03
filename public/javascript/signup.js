@@ -1,36 +1,63 @@
-async function signupFormHandler(event) {
+const signupFormHandler = async (event) => {
 
     event.preventDefault();
+  
+    const username = document.querySelector('#username').value.trim();
 
-    const user_name = document.querySelector('#username-signup').value.trim();
+    const password = document.querySelector('#password').value.trim();
 
-    const password = document.querySelector('#password-signup').value.trim();
+    const passwordAgain = document.querySelector('#passwordAgain').value.trim();
+  
+    if (password !== passwordAgain) {
 
-    if (user_name && password) {
+      alert('Passwords are not the same!');
 
-        const response = await fetch('/api/user', {
+      return;
 
-            method: 'POST',
+    }
+  
+    if (username && password && passwordAgain) {
 
-            body: JSON.stringify({ user_name, password }),
-            
-            headers: { 'Content-Type': 'application/json' }
+      try {
+
+        const response = await fetch('/api/users/signup', {
+
+          method: 'POST',
+
+          body: JSON.stringify({ username, password }),
+
+          headers: { 'Content-Type': 'application/json' }
 
         });
+  
+        if (responseponse.ok) {
 
-        if (response.ok) {
+          const data = await response.json();
 
-            document.location.replace('/dashboard');
+          console.log('Signed up successfully!', data);
+
+          document.location.replace('/dashboard');
 
         } else {
 
-            alert(response.statusText);
+          const errormsg = await response.json();
+
+          console.error('Signup unsuccessful', errormsg);
+
+          alert('Unable to signup! Please check your inputs, and try again.');
 
         }
 
+      } catch (error) {
+
+        console.error('Signup unsuccessful', error);
+
+        alert('Unsuccessful. Please try again.');
+
+      }
+
     }
 
-}
+  };
 
-document.querySelector('.signup-form').addEventListener('submit', signupFormHandler);
-
+document.querySelector('.signUpForm').addEventListener('submit', signupFormHandler);
