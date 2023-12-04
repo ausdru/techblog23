@@ -4,12 +4,12 @@ const userSeeds = [
   {
     user_name: 'Borat',
     email: 'bangbang@gmail.com',
-    password: 22,
+    password: 20000000,
   },
   {
     user_name: 'derp',
     email: 'mememan420@yahoo.com',
-    password: 25,
+    password: 20000001,
   },
 ];
 

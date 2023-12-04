@@ -1,52 +1,22 @@
-const CommentFormHandler = async (event) => {
+document.addEventListener('DOMContentLoaded', function() {
+  const commentForm = document.getElementById('comment-form');
 
-    event.preventDefault();
-  
-    const comment_text = document.querySelector("#comment_text").value.trim();
-    
-    const post_id = document.querySelector("input[name='post_id']").value;
-  
-    if (!comment_text) {
-
-      alert('Please type a comment!');
-
-      return;
-    }
-  
-    try {
-
-      const response = await fetch("/api/comments", {
-
-        method: "POST",
-
-        body: JSON.stringify({ post_id, text: comment_text }),
-
-        headers: {"Content-Type": "application/json"}
-
+  if (commentForm) {
+    commentForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const commentText = commentForm.querySelector('textarea[name="comment"]').value;
+      const postId = window.location.pathname.split('/').pop();
+      const response = await fetch('/api/comments', {
+        method: 'POST',
+        body: JSON.stringify({ postId, text: commentText }),
+        headers: { 'Content-Type': 'application/json' }
       });
-  
+
       if (response.ok) {
-
-        const data = await response.json();
-
-        console.log('Comment successfully posted.', data);
-
-        window.location.reload();
-
+        location.reload();
       } else {
-
-        const errmsg = await response.json();
-
-        console.error('Unable to post comment!', errmsg);
-
-        alert('Comment unsuccessful, Please try again.');
-
+        alert('Failed to post comment');
       }
-
-    } catch (error) {
-
-      console.error('Comment creation error', error);
-
-      alert('Unsuccessful. Please try again!');
-    }
-  };
+    });
+  }
+});

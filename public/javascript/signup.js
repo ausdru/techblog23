@@ -1,63 +1,74 @@
-const signupFormHandler = async (event) => {
+// public/js/register.js:
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('form[action="/auth/register"]');
+  const passwordInput = document.querySelector('#password');
 
+  passwordInput.addEventListener('input', (event) => {
+    evaluatePasswordStrength(event.target.value);
+  });
+
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
-  
+
     const username = document.querySelector('#username').value.trim();
+    const email = document.querySelector('#email').value.trim();
+    const password = passwordInput.value.trim();
 
-    const password = document.querySelector('#password').value.trim();
-
-    const passwordAgain = document.querySelector('#passwordAgain').value.trim();
-  
-    if (password !== passwordAgain) {
-
-      alert('Passwords are not the same!');
-
+    // Check if the password is strong enough
+    if (!isPasswordStrong(password)) {
+      alert('Password is not strong enough. Please use a stronger password.');
       return;
-
     }
-  
-    if (username && password && passwordAgain) {
 
+    // Check if all fields are filled
+    if (username && email && password) {
       try {
-
-        const response = await fetch('/api/users/signup', {
-
+        const response = await fetch('/api/users/register', {
           method: 'POST',
-
-          body: JSON.stringify({ username, password }),
-
-          headers: { 'Content-Type': 'application/json' }
-
+          body: JSON.stringify({ username, email, password }),
+          headers: { 'Content-Type': 'application/json' },
         });
-  
-        if (responseponse.ok) {
 
-          const data = await response.json();
-
-          console.log('Signed up successfully!', data);
-
+        if (response.ok) {
           document.location.replace('/dashboard');
-
         } else {
-
-          const errormsg = await response.json();
-
-          console.error('Signup unsuccessful', errormsg);
-
-          alert('Unable to signup! Please check your inputs, and try again.');
-
+          const errorData = await response.json();
+          alert(errorData.message || 'Failed to sign up');
         }
-
       } catch (error) {
-
-        console.error('Signup unsuccessful', error);
-
-        alert('Unsuccessful. Please try again.');
-
+        console.error('Error:', error);
       }
-
+    } else {
+      alert('Please fill in all fields.');
     }
+  });
+});
 
-  };
+function isPasswordStrong(password) {
+  const isLength = password.length >= 8;
 
-document.querySelector('.signUpForm').addEventListener('submit', signupFormHandler);
+  const requiredCriteria = 1;
+  const metCriteria = [isLength].filter(Boolean).length;
+
+  return metCriteria >= requiredCriteria;
+}
+
+function evaluatePasswordStrength(password) {
+  const strengthMessage = document.querySelector('#password-strength-message');
+  const isLength = password.length >= 8;
+
+  const requiredCriteria = 1;
+  const metCriteria = [isLength].filter(Boolean).length;
+
+  if (metCriteria < requiredCriteria) {
+    strengthMessage.textContent = 'Password is too weak';
+    strengthMessage.style.color = 'red';
+  } else if (metCriteria === requiredCriteria) {
+    strengthMessage.textContent = 'Password is moderate';
+    strengthMessage.style.color = 'orange';
+  } else {
+    strengthMessage.textContent = 'Password is strong';
+    strengthMessage.style.color = 'green';
+  }
+}
+

@@ -1,31 +1,30 @@
-const logoutHandler = async () => {
+document.addEventListener('DOMContentLoaded', () => {
+  const logoutLink = document.getElementById('logoutLink');
 
-    try {
+  if (logoutLink) {
+    logoutLink.addEventListener('click', (event) => {
+      event.preventDefault();
 
-      const response = await fetch('/api/users/logout', {
-
+      fetch('/api/users/logout', {
         method: 'POST',
-
         headers: { 'Content-Type': 'application/json' }
+      })
+        .then(response => {
+          if (response.ok) {
+            window.location.href = '/login';
+          } else {
+            response.text().then(text => {
+              console.error('Logout failed:', text);
+              alert(text);
+            });
+          }
+        })
+        .catch((error) => {
+          console.error('Logout error:', error);
+          alert('An error occurred while trying to log out.');
+        });
+    });
+  }
+});
 
-      });
-
-      if (response.ok) {
-
-        document.location.replace('/');
-
-      } else {
-
-        alert('Logout attempt unsuccessful!');
-
-      }
-
-    } catch (error) {
-
-      console.error('Logout unsuccessful.', error);
-
-    }
-
-  };
-
-  document.querySelector('#logout').addEventListener('click', logoutHandler);
+  
