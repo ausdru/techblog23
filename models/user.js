@@ -10,40 +10,36 @@ class User extends Model {
 
 User.init(
   {
-    id: 
-    {
+    id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
     },
-
-    username: 
-    {
+    username: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-      defaultValue: sequelize.fn('CONCAT', 'user_', sequelize.col('id')),
-    },
 
-    password: 
-    {
+    },
+    password: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: { len: [6] },
     },
-
   },
-
   {
     hooks: {
       async beforeCreate(newUserData) {
         try {
+          newUserData.username =
+            newUserData.username ||
+            `user_${newUserData.id}`; // Generate a default username if not provided
           newUserData.username = newUserData.username.toLowerCase();
           newUserData.password = await bcrypt.hash(newUserData.password, 6);
           return newUserData;
         } catch (error) {
-          throw new Error("Error hashing the password!");
+          throw new Error('Error hashing the password!');
         }
       },
     },

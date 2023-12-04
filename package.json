@@ -13,15 +13,13 @@
   "scripts": {
     "start": "node server.js",
     "seed": "node seeds/index.js"
-
-
   },
   "name": "techblog23",
   "description": "My challenge this week is to build a CMS-style blog site similar to a Wordpress site, where devs can publish their blog posts and comment on other devs’ posts as well.",
   "version": "1.0.0",
   "main": "server.js",
-  "devDependencies": {},
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {}
 }
