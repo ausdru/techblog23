@@ -1,31 +1,21 @@
-// Express Router Configuration for Comment Routes (API)
+// controllers/api/comment-routes.js:
 const router = require('express').Router();
 const { Comment } = require('../../models');
 const auth = require('../../utils/auth');
 
-router.get("/", (req, res) => {
-    Comment.findAll()
-        .then((dbCommentData) => res.json(dbCommentData))
-        .catch((err) => {
-            console.log(err);
-            res.status(500).json(err);
-        });
+router.post('/', auth, async (req, res) => {
+  console.log('Comment POST request received:', req.body);
+  try {
+    const newComment = await Comment.create({
+      text: req.body.text,     // This should match the key from the client-side
+      postId: req.body.postId, // This too
+      userId: req.session.userId  // This grabs the userId from the session
+    });
+    res.status(200).json(newComment);
+  } catch (err) {
+    console.error(err);
+    res.status(400).json(err);
+  }
 });
-
-router.post('/', auth, (req, res) => {
-    if (req.session) {
-        Comment.create({
-                comment_text: req.body.comment_text,
-                post_id: req.body.post_id,
-                user_id: req.session.user_id
-            })
-            .then(dbCommentData => res.json(dbCommentData))
-            .catch(err => {
-                console.log(err);
-                res.status(400).json(err);
-            });
-    }
-});
-
 
 module.exports = router;

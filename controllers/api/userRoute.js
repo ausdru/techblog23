@@ -1,233 +1,79 @@
 const router = require('express').Router();
+const { User } = require('../../models');
+const bcryptjs = require('bcryptjs');
 
-const { User, Post, Comment } = require('../../models');
 
-// 
-router.get('/', (req, res) => {
+// Login route
+router.post('/login', async (req, res) => {
+    try {
+        const userData = await User.findOne({ where: { email: req.body.email } });
 
-    User.findAll({
-
-        attributes: 
-        {
-
-            exclude: ['password']
-
-        }
-
-    })
-
-    .then(dbUserData => res.json(dbUserData))
-
-    .catch(err => {
-
-        console.log(err);
-
-        res.status(500).json(err);
-
-    });
-
-});
-
-//
-router.get('/:id', (req, res) => {
-
-    User.findOne({
-
-        attributes: {
-
-            exclude: ['password']
-
-        },
-
-        where: {
-
-            user_idid: req.params.user_id
-
-        },
-
-        include: [
-
-            {
-                
-                model: Post,
-
-                attributes: ['post_id', 'post_title', 'post_content', 'created_at']
-
-            },
-
-            {
-
-                model: Comment,
-
-                attributes: ['comment_id', 'comment_text', 'created_at'],
-
-                include: {
-
-                    model: Post,
-
-                    attributes: ['post_title']
-
-                }
-
-            }
-
-        ]
-
-    })
-
-    .then(dbUserData => {
-
-        if (!dbUserData) {
-
-            res.status(404).json({
-
-                message: 'No user found with that ID.'
-
-            });
-
+        if (!userData) {
+            res.status(400).json({ message: 'Incorrect email or password, please try again' });
             return;
-
         }
 
-        res.json(dbUserData);
-
-    })
-
-    .catch(err => {
-
-        console.log(err);
-
-        res.status(500).json(err);
-
-    });
-
-});
-
-//
-router.post('/', (req, res) => {
-
-    User.create({
-
-        user_name: req.body.user_name,
-
-        password: req.body.password
-
-    })
-
-    .then(dbUserData => {
-
-        req.session.save(() => {
-
-            req.session.user_id = dbUserData.user_id;
-
-            req.session.user_name = dbUserData.user_name;
-
-            req.session.loggedIn = true;
-
-            res.json(dbUserData);
-
-        });
-
-    })
-
-    .catch(err => {
-
-        console.log(err);
-
-        res.status(500).json(err);
-
-    });
-
-});
-
-// 
-router.post('/login', (req, res) => {
-
-    User.findOne({
-
-        where: {
-
-            username: req.body.user_name
-
-        }
-
-    })
-
-    .then(dbUserData => {
-
-        if (!dbUserData) {
-
-            res.status(400).json({
-
-                message: 'No account found with that username!'
-
-            });
-
-            return;
-
-        }
-
-        const validPassword = dbUserData.checkPassword(req.body.password);
+        const validPassword = await bcryptjs.compare(req.body.password, userData.password);
 
         if (!validPassword) {
-
-            res.status(400).json({
-
-                message: 'Incorrect password! Please try again.'
-
-            });
-
+            res.status(400).json({ message: 'Incorrect email or password, please try again' });
             return;
-
         }
 
         req.session.save(() => {
+            req.session.userId = userData.id;
+            req.session.logged_in = true;
+            console.log('Session ID:', req.session.id, 'Session Data:', req.session);
 
-            req.session.user_id = dbUserData.user_id;
-
-            req.session.user_name = dbUserData.user_name;
-
-            req.session.loggedIn = true;
-
-            res.json({
-
-                user: dbUserData,
-
-                message: 'Logged in successfully.'
-
-            });
-
+            res.json({ user: userData, message: 'You are now logged in!' });
         });
 
-    })
-
-    .catch(err => {
-
-        console.log(err);
-
-        res.status(500).json(err);
-
-    });
-
+    } catch (err) {
+        res.status(400).json(err);
+    }
 });
 
-//
+// Logout route
 router.post('/logout', (req, res) => {
+    console.log('Cookies sent with request:', req.cookies);
 
-    if (req.session.loggedIn) {
+    const sessionId = req.session.id;
 
+    if (req.session.logged_in) {
         req.session.destroy(() => {
+            console.log('Logging out session ID:', sessionId);
 
             res.status(204).end();
+        });
+    } else {
+        res.status(404).end();
+    }
+});
 
+// Registering account route
+router.post('/register', async (req, res) => {
+    try {
+        console.log('Received data for registration:', req.body);
+
+        const userData = await User.create({
+            username: req.body.username,
+            email: req.body.email,
+            password: await bcryptjs.hash(req.body.password, 10)
         });
 
-    } else {
-
-        res.status(404).end();
-
+        req.session.save(() => {
+            req.session.userId = userData.id;
+            req.session.logged_in = true;
+            res.status(200).json({ user: userData, message: 'Registration successful!' });
+        });
+    } catch (err) {
+        if (err.name === 'SequelizeUniqueConstraintError') {
+            res.status(400).json({ message: 'Username already in use. Please choose another.' });
+        } else {
+            console.error('Error during user registration:', err);
+            res.status(400).json({ message: 'Unable to register', error: err });
+        }
     }
-
 });
 
 module.exports = router;

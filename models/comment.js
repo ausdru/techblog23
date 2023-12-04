@@ -1,5 +1,3 @@
-// models/comment.js
-
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
@@ -15,7 +13,7 @@ Comment.init({
     text: {
         type: DataTypes.TEXT,
         allowNull: false,
-        defaultValue: 'Default Comment Text' // Add this line with your desired default text
+        defaultValue: 'Default Comment Text' 
     },
     user_id: {
         type: DataTypes.INTEGER,
