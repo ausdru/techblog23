@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Individual post route
+// single post route
 router.get('/post/:id', auth, async (req, res) => {
   try {
     const postData = await Post.findByPk(req.params.id, {
@@ -90,19 +90,19 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Registration routes
-router.get('/register', (req, res) => {
-  res.render('register');
+// Signup routes
+router.get('/signup', (req, res) => {
+  res.render('signup');
 });
 
-router.post('/register', [
+router.post('/signup', [
   check('username', 'Username is required').not().isEmpty(),
   check('email', 'Please include a valid email').isEmail(),
   check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
 ], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).render('register', { errors: errors.array() });
+    return res.status(400).render('signup', { errors: errors.array() });
   }
 
   const { username, email, password } = req.body;
@@ -112,7 +112,7 @@ router.post('/register', [
     res.redirect('/login');
   } catch (error) {
     console.error('Registration error:', error);
-    res.status(500).render('register', { error: 'Internal Server Error' });
+    res.status(500).render('signup', { error: 'Internal Server Error' });
   }
 });
 

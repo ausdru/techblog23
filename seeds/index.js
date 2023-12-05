@@ -18,21 +18,20 @@ const seedAll = async () => {
   try {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
+
+    await sequelize.sync();
+
+    await seedUsers();
+    await seedPosts();
+    await seedComments();
+
+    process.exit(0);
   } catch (error) {
     console.error('Unable to connect to the database:', error);
-    process.exit(1); // Exit with an error code
+    process.exit(1);
   }
-
-  await sequelize.sync({ force: true });
-
-  await seedUsers();
-
-  await seedPosts();
-
-  await seedComments();
-
-  process.exit(0);
 };
+
 
 seedAll();
 

@@ -35,7 +35,6 @@ router.post('/login', async (req, res) => {
 
 // Logout route
 router.post('/logout', (req, res) => {
-    console.log('Cookies sent with request:', req.cookies);
 
     const sessionId = req.session.id;
 
@@ -50,10 +49,10 @@ router.post('/logout', (req, res) => {
     }
 });
 
-// Registering account route
-router.post('/register', async (req, res) => {
+// signup account route
+router.post('/signup', async (req, res) => {
     try {
-        console.log('Received data for registration:', req.body);
+        console.log('Received data for signup:', req.body);
 
         const userData = await User.create({
             username: req.body.username,
@@ -64,14 +63,14 @@ router.post('/register', async (req, res) => {
         req.session.save(() => {
             req.session.userId = userData.id;
             req.session.logged_in = true;
-            res.status(200).json({ user: userData, message: 'Registration successful!' });
+            res.status(200).json({ user: userData, message: 'Signup successful!' });
         });
     } catch (err) {
         if (err.name === 'SequelizeUniqueConstraintError') {
             res.status(400).json({ message: 'Username already in use. Please choose another.' });
         } else {
-            console.error('Error during user registration:', err);
-            res.status(400).json({ message: 'Unable to register', error: err });
+            console.error('Error during user signup:', err);
+            res.status(400).json({ message: 'Unable to signup', error: err });
         }
     }
 });

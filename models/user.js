@@ -1,54 +1,45 @@
-const sequelize = require('../config/connection');
 const { Model, DataTypes } = require('sequelize');
-const bcryptjs = require('bcryptjs');
+const sequelize = require('../config/connection');
 
-class User extends Model {
-  checkPassword(loginPassword) {
-    return bcryptjs.compareSync(loginPassword, this.password);
-  }
-}
+class User extends Model {}
 
 User.init(
   {
-    id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
-    },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-
+      defaultValue: 'defaultuser_1',
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true,
+      },
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: { len: [6] },
     },
   },
   {
-    hooks: {
-      async beforeCreate(newUserData) {
-        try {
-          newUserData.username =
-            newUserData.username ||
-            `user_${newUserData.id}`; // Generate a default username if not provided
-          newUserData.username = newUserData.username.toLowerCase();
-          newUserData.password = await bcryptjs.hash(newUserData.password, 6);
-          return newUserData;
-        } catch (error) {
-          throw new Error('Error hashing the password!');
-        }
-      },
-    },
     sequelize,
-    timestamps: false,
-    freezeTableName: true,
-    underscored: true,
-    modelName: 'user',
+    modelName: 'User',
+    tableName: 'user',
   }
 );
+
+User.associate = (models) => {
+  User.hasMany(models.Post, {
+    foreignKey: 'userId',
+    as: 'post',
+  });
+  User.hasMany(models.Comment, {
+    foreignKey: 'userId',
+    as: 'comment',
+  });
+};
 
 module.exports = User;

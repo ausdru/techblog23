@@ -24,7 +24,7 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-// Route to edit a specific post
+// Route to edit single post
 router.get('/edit-post/:id', auth, async (req, res) => {
   console.log("Edit post route accessed");
   try {
