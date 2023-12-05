@@ -31,15 +31,15 @@ user.init(
   }
 );
 
-User.associate = (models) => {
-  User.hasMany(models.Post, {
+user.associate = (models) => {
+  user.hasMany(models.post, {
     foreignKey: 'userId',
     as: 'post',
   });
-  User.hasMany(models.Comment, {
+  user.hasMany(models.comment, {
     foreignKey: 'userId',
     as: 'comment',
   });
 };
 
-module.exports = User;
+module.exports = user;
