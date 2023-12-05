@@ -1,15 +1,21 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
-class user extends Model {}
+class User extends Model {}
 
-user.init(
+User.init(
   {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
-      defaultValue: 'defaultuser_1',
+      unique: true
     },
     email: {
       type: DataTypes.STRING,
@@ -27,19 +33,8 @@ user.init(
   {
     sequelize,
     modelName: 'User',
-    tableName: 'user',
+    freezeTableName: true,
   }
 );
 
-user.associate = (models) => {
-  user.hasMany(models.post, {
-    foreignKey: 'userId',
-    as: 'post',
-  });
-  user.hasMany(models.comment, {
-    foreignKey: 'userId',
-    as: 'comment',
-  });
-};
-
-module.exports = user;
+module.exports = User;

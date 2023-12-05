@@ -1,15 +1,6 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-const sequelize = new Sequelize({
-  database: process.env.DB_NAME || 'techblog_db',
-  username: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || 'Biscuit02125438',
-  host: process.env.DB_HOST || '127.0.0.1',
-  port: process.env.DB_PORT || 3306,
-  dialect: 'mysql',
-});
-
 const seedUsers = require('./userSeeds');
 const seedPosts = require('./postSeeds');
 const seedComments = require('./commentSeeds');

@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 3001;
 // ---------------------------------------------------------------------------
 // Session Configuration:
 const userSession = {
-    secret: process.env.DB_SECRET,
+    secret: 'f6c2e26da9035bcc47904e59890fe987bf21e7a58a250e07f8f44a18caf0b1ae',
     cookie: {
         maxAge: 60 * 60 * 1000,
     },
@@ -56,6 +56,6 @@ app.use(router);
 
 // ---------------------------------------------------------------------------
 // Starting Server & Syncing With Database:
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ force: true }).then(() => {
     app.listen(PORT, () => console.log(`Application now listening on ${PORT}!`));
 });
